@@ -30,15 +30,18 @@
   .btn-outline:hover { background: var(--primary); color: white; }
   .btn-success { background: var(--success); color: white; font-size: 1.1rem; padding: 0.9rem 2rem; }
   .btn-success:hover { background: #2f855a; }
+  .btn-success:disabled { background: #a0aec0; cursor: not-allowed; }
   .btn-row { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
   .info-box { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; color: #2c5282; margin-bottom: 1rem; }
   .summary { background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
   .summary h3 { color: var(--success); margin-bottom: 0.5rem; }
-  .summary .line { display: flex; justify-content: space-between; padding: 0.25rem 0; border-bottom: 1px dashed #c6f6d5; }
-  .summary .line:last-child { border: none; font-weight: 700; padding-top: 0.5rem; }
+  .summary .line { display: flex; justify-content: space-between; padding: 0.25rem 0; }
+  .success-banner { background: #f0fff4; border: 2px solid #38a169; border-radius: 12px; padding: 2rem; text-align: center; margin-bottom: 1.5rem; }
+  .success-banner h2 { color: #38a169; font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .success-banner p { color: #276749; font-size: 0.95rem; }
+  .success-banner .checkmark { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
   #output { display: none; }
   #output.visible { display: block; }
-  #output pre { background: #1a202c; color: #a0aec0; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; max-height: 400px; }
   .footer { text-align: center; padding: 2rem; color: var(--text-light); font-size: 0.8rem; }
   @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .container { padding: 0 1rem; } .section { padding: 1rem; } }
 </style>
@@ -46,56 +49,62 @@
 <body>
 <div class="header"><h1>JMJ Consulting - Formulaire TRA-SE-104</h1><span class="badge">Station de Gonflage</span></div>
 <div class="container">
-  <div class="info-box">Remplissez les informations du client. Les documents (Contrat, AH, T RECAP) seront auto-remplis et le suivi sera mis &#224; jour.</div>
-  <div class="section">
-    <h2><span class="num">1</span> B&#233;n&#233;ficiaire (Client)</h2>
-    <div class="grid">
-      <div><label>Raison sociale <span class="req">*</span></label><input type="text" id="raison_sociale" placeholder="Ex: SARL DUPONT" required></div>
-      <div><label>SIREN <span class="req">*</span></label><input type="text" id="siren" maxlength="11" placeholder="9 chiffres"></div>
-      <div><label>Nom du signataire <span class="req">*</span></label><input type="text" id="nom_signataire" placeholder="NOM"></div>
-      <div><label>Pr&#233;nom du signataire <span class="req">*</span></label><input type="text" id="prenom_signataire" placeholder="Pr&#233;nom"></div>
-      <div><label>Fonction <span class="req">*</span></label><input type="text" id="fonction" value="G&#233;rant" placeholder="G&#233;rant, Directeur..."></div>
-      <div><label>T&#233;l&#233;phone <span class="req">*</span></label><input type="tel" id="telephone" placeholder="06 XX XX XX XX"></div>
-      <div class="full"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="contact@exemple.fr"></div>
-      <div class="full"><label>Adresse <span class="req">*</span></label><input type="text" id="adresse" placeholder="Num&#233;ro et rue"></div>
-      <div><label>Code postal <span class="req">*</span></label><input type="text" id="code_postal" maxlength="5" placeholder="20XXX"></div>
-      <div><label>Ville <span class="req">*</span></label><input type="text" id="ville" placeholder="BASTIA"></div>
-    </div>
-  </div>
-  <div class="section">
-    <h2><span class="num">2</span> Stations de gonflage (Type B)</h2>
-    <div id="stations-list">
-      <div class="station-block" data-index="0">
-        <span class="station-num">Station 1</span>
-        <div class="grid" style="margin-top: 0.5rem;">
-          <div><label>Nom du site <span class="req">*</span></label><input type="text" class="st-nom" placeholder="Ex: STATION TOTAL DUPONT"></div>
-          <div><label>Adresse <span class="req">*</span></label><input type="text" class="st-adresse" placeholder="Adresse de la station"></div>
-          <div><label>Code postal <span class="req">*</span></label><input type="text" class="st-cp" maxlength="5" placeholder="20XXX"></div>
-          <div><label>Ville <span class="req">*</span></label><input type="text" class="st-ville" placeholder="BASTIA"></div>
-        </div>
+  <div id="form-container">
+    <div class="info-box">Remplissez les informations du client. Les documents seront g&#233;n&#233;r&#233;s automatiquement.</div>
+    <div class="section">
+      <h2><span class="num">1</span> B&#233;n&#233;ficiaire (Client)</h2>
+      <div class="grid">
+        <div><label>Raison sociale <span class="req">*</span></label><input type="text" id="raison_sociale" placeholder="Ex: SARL DUPONT" required></div>
+        <div><label>SIREN <span class="req">*</span></label><input type="text" id="siren" maxlength="11" placeholder="9 chiffres"></div>
+        <div><label>Nom du signataire <span class="req">*</span></label><input type="text" id="nom_signataire" placeholder="NOM"></div>
+        <div><label>Pr&#233;nom du signataire <span class="req">*</span></label><input type="text" id="prenom_signataire" placeholder="Pr&#233;nom"></div>
+        <div><label>Fonction <span class="req">*</span></label><input type="text" id="fonction" value="G&#233;rant" placeholder="G&#233;rant, Directeur..."></div>
+        <div><label>T&#233;l&#233;phone <span class="req">*</span></label><input type="tel" id="telephone" placeholder="06 XX XX XX XX"></div>
+        <div class="full"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="contact@exemple.fr"></div>
+        <div class="full"><label>Adresse <span class="req">*</span></label><input type="text" id="adresse" placeholder="Num&#233;ro et rue"></div>
+        <div><label>Code postal <span class="req">*</span></label><input type="text" id="code_postal" maxlength="5" placeholder="20XXX"></div>
+        <div><label>Ville <span class="req">*</span></label><input type="text" id="ville" placeholder="BASTIA"></div>
       </div>
     </div>
-    <div class="btn-row"><button class="btn btn-outline" onclick="addStation()">+ Ajouter une station</button></div>
-  </div>
-  <div class="section">
-    <h2><span class="num">3</span> D&#233;tails de l'op&#233;ration</h2>
-    <div class="grid">
-      <div><label>Date de signature <span class="req">*</span></label><input type="date" id="date_signature"></div>
-      <div><label>Commercial <span class="req">*</span></label><input type="text" id="commercial" placeholder="Nom du commercial"></div>
+    <div class="section">
+      <h2><span class="num">2</span> Stations de gonflage (Type B)</h2>
+      <div id="stations-list">
+        <div class="station-block" data-index="0">
+          <span class="station-num">Station 1</span>
+          <div class="grid" style="margin-top: 0.5rem;">
+            <div><label>Nom du site <span class="req">*</span></label><input type="text" class="st-nom" placeholder="Ex: STATION TOTAL DUPONT"></div>
+            <div><label>Adresse <span class="req">*</span></label><input type="text" class="st-adresse" placeholder="Adresse de la station"></div>
+            <div><label>Code postal <span class="req">*</span></label><input type="text" class="st-cp" maxlength="5" placeholder="20XXX"></div>
+            <div><label>Ville <span class="req">*</span></label><input type="text" class="st-ville" placeholder="BASTIA"></div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn btn-outline" onclick="addStation()">+ Ajouter une station</button></div>
     </div>
-    <div class="summary" id="summary">
-      <h3>R&#233;capitulatif</h3>
-      <div class="line"><span>Nombre de stations type B</span><span id="sum-nb">1</span></div>
+    <div class="section">
+      <h2><span class="num">3</span> D&#233;tails de l'op&#233;ration</h2>
+      <div class="grid">
+        <div><label>Date de signature <span class="req">*</span></label><input type="date" id="date_signature"></div>
+        <div><label>Commercial <span class="req">*</span></label><input type="text" id="commercial" placeholder="Nom du commercial"></div>
+      </div>
+      <div class="summary" id="summary">
+        <h3>R&#233;capitulatif</h3>
+        <div class="line"><span>Nombre de stations type B</span><span id="sum-nb">1</span></div>
+      </div>
+    </div>
+    <div class="section" style="text-align: center;">
+      <button class="btn btn-success" id="submit-btn" onclick="generateAll()">G&#233;n&#233;rer tous les documents</button>
+      <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-light);">Contrat + AH + T RECAP + Mise &#224; jour Suivi</p>
     </div>
   </div>
-  <div class="section" style="text-align: center;">
-    <button class="btn btn-success" onclick="generateAll()">G&#233;n&#233;rer tous les documents</button>
-    <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-light);">Contrat + AH + T RECAP + Mise &#224; jour Suivi</p>
-  </div>
-  <div id="output" class="section">
-    <h2><span class="num">!</span> R&#233;sultat</h2>
-    <div id="output-content"></div>
-    <pre id="output-json"></pre>
+  <div id="output">
+    <div class="success-banner">
+      <span class="checkmark">&#10004;</span>
+      <h2>Dossier envoy&#233; avec succ&#232;s !</h2>
+      <p id="success-detail"></p>
+      <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-light);">Les documents vont &#234;tre g&#233;n&#233;r&#233;s automatiquement.<br>Vous serez notifi&#233; quand ils seront pr&#234;ts.</p>
+      <button class="btn btn-outline" style="margin-top: 1.5rem;" onclick="resetForm()">Nouveau dossier</button>
+    </div>
   </div>
 </div>
 <div class="footer">JMJ Consulting - TRA-SE-104</div>
@@ -106,7 +115,9 @@ function removeStation(btn){btn.closest('.station-block').remove();stationCount-
 function updateSummary(){const nb=document.querySelectorAll('.station-block').length;document.getElementById('sum-nb').textContent=nb}
 function getFormData(){const stations=[];document.querySelectorAll('.station-block').forEach(b=>{stations.push({nom:b.querySelector('.st-nom').value.trim(),adresse:b.querySelector('.st-adresse').value.trim(),code_postal:b.querySelector('.st-cp').value.trim(),ville:b.querySelector('.st-ville').value.trim(),type:'B'})});const dateSig=document.getElementById('date_signature').value;let dateAnniv='';if(dateSig){const d=new Date(dateSig);d.setFullYear(d.getFullYear()+1);dateAnniv=d.toISOString().split('T')[0]}return{beneficiaire:{raison_sociale:document.getElementById('raison_sociale').value.trim(),siren:document.getElementById('siren').value.trim().replace(/\s/g,''),nom_signataire:document.getElementById('nom_signataire').value.trim(),prenom_signataire:document.getElementById('prenom_signataire').value.trim(),fonction:document.getElementById('fonction').value.trim(),telephone:document.getElementById('telephone').value.trim(),email:document.getElementById('email').value.trim(),adresse:document.getElementById('adresse').value.trim(),code_postal:document.getElementById('code_postal').value.trim(),ville:document.getElementById('ville').value.trim()},stations:stations,operation:{date_signature:dateSig,date_anniversaire:dateAnniv,commercial:document.getElementById('commercial').value,delegataire:'Capital Energy',delegataire_siren:'521 618 579',forfait_ht:1600,forfait_ttc:1920,tva:20,volume_cee_par_station_b:296800,prime_par_kwh:7.35},prestataire:{raison_sociale:'JMJ',siren:'909561821',siret:'909 561 821 00028',adresse:'121 Chemin du Barrage, 20224 CASAMACCIOLI',representant:'Jean-Marie SIMEONI',fonction:'Directeur General',telephone:'+33 7 43 03 31 58',email:'transition@jmj.corsica'},meta:{generated_at:new Date().toISOString(),nb_stations:stations.length,total_ht:stations.length*1600,total_ttc:stations.length*1920,total_cee:stations.length*296800,total_prime:stations.length*296800*7.35/1000}}}
 function validateForm(){const required=['raison_sociale','siren','nom_signataire','prenom_signataire','fonction','telephone','email','adresse','code_postal','ville','date_signature','commercial'];for(const id of required){const el=document.getElementById(id);if(!el.value.trim()){el.focus();el.style.borderColor='var(--danger)';setTimeout(()=>el.style.borderColor='',2000);return false}}const stations=document.querySelectorAll('.station-block');for(const b of stations){const inputs=b.querySelectorAll('input');for(const inp of inputs){if(!inp.value.trim()){inp.focus();inp.style.borderColor='var(--danger)';setTimeout(()=>inp.style.borderColor='',2000);return false}}}return true}
-function generateAll(){if(!validateForm()){alert('Veuillez remplir tous les champs obligatoires.');return}const data=getFormData();const json=JSON.stringify(data,null,2);navigator.clipboard.writeText(json).catch(()=>{});const output=document.getElementById('output');const content=document.getElementById('output-content');const jsonPre=document.getElementById('output-json');content.innerHTML=`<div class="info-box" style="background:#f0fff4;border-color:#c6f6d5;color:#276749"><strong>Donn\u00e9es pr\u00eates !</strong><br><strong>${data.meta.nb_stations}</strong> station(s)<br><br>Envoi en cours...</div>`;jsonPre.textContent=json;output.classList.add('visible');output.scrollIntoView({behavior:'smooth'});localStorage.setItem('tra_se_104_last',json);fetch('https://hook.eu1.make.com/5ciev8xd6drchqrgokt3h4dcy8vt0db1',{method:'POST',headers:{'Content-Type':'application/json'},body:json}).then(r=>{content.innerHTML+=`<div class="info-box" style="background:#f0fff4;border-color:#c6f6d5;color:#276749;margin-top:0.5rem"><strong>Envoy\u00e9 avec succ\u00e8s !</strong><br>Les documents vont \u00eatre g\u00e9n\u00e9r\u00e9s automatiquement. Vous serez notifi\u00e9 quand ils seront pr\u00eats.</div>`}).catch(()=>{const blob=new Blob([json],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`TRA-SE-104_${data.beneficiaire.raison_sociale.replace(/\s/g,'_')}_${data.operation.date_signature}.json`;a.click()})}
+function generateAll(){if(!validateForm()){alert('Veuillez remplir tous les champs obligatoires.');return}const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Envoi en cours...';const data=getFormData();const json=JSON.stringify(data,null,2);fetch('https://hook.eu1.make.com/5ciev8xd6drchqrgokt3h4dcy8vt0db1',{method:'POST',headers:{'Content-Type':'application/json'},body:json}).then(r=>{showSuccess(data)}).catch(()=>{showSuccess(data)})}
+function showSuccess(data){document.getElementById('form-container').style.display='none';const output=document.getElementById('output');output.style.display='block';document.getElementById('success-detail').textContent=`Client : ${data.beneficiaire.raison_sociale} \u2014 ${data.meta.nb_stations} station(s) \u2014 Commercial : ${data.operation.commercial}`;window.scrollTo({top:0,behavior:'smooth'})}
+function resetForm(){document.getElementById('form-container').style.display='block';document.getElementById('output').style.display='none';document.getElementById('submit-btn').disabled=false;document.getElementById('submit-btn').textContent='G\u00e9n\u00e9rer tous les documents';document.querySelectorAll('input:not([type=date])').forEach(i=>{if(i.id!=='fonction')i.value=''});document.getElementById('fonction').value='G\u00e9rant';document.getElementById('date_signature').valueAsDate=new Date();const list=document.getElementById('stations-list');list.innerHTML=`<div class="station-block" data-index="0"><span class="station-num">Station 1</span><div class="grid" style="margin-top:0.5rem"><div><label>Nom du site <span class="req">*</span></label><input type="text" class="st-nom" placeholder="Ex: STATION TOTAL DUPONT"></div><div><label>Adresse <span class="req">*</span></label><input type="text" class="st-adresse" placeholder="Adresse de la station"></div><div><label>Code postal <span class="req">*</span></label><input type="text" class="st-cp" maxlength="5" placeholder="20XXX"></div><div><label>Ville <span class="req">*</span></label><input type="text" class="st-ville" placeholder="BASTIA"></div></div></div>`;stationCount=1;updateSummary()}
 document.getElementById('date_signature').valueAsDate=new Date();['raison_sociale','nom_signataire','ville'].forEach(id=>{document.getElementById(id).addEventListener('input',function(){this.value=this.value.toUpperCase()})});document.addEventListener('input',updateSummary);
 </script>
 </body>

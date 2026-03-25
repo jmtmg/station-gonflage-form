@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMJ Consulting - Nouveau dossier CEE</title>
+<title>JMJ - Nouveau dossier CEE</title>
 <style>
   :root { --primary: #1a365d; --primary-light: #2c5282; --accent: #ed8936; --bg: #f7fafc; --card: #ffffff; --border: #e2e8f0; --text: #2d3748; --text-light: #718096; --success: #38a169; --danger: #e53e3e; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,7 +47,7 @@
 </style>
 </head>
 <body>
-<div class="header"><h1>JMJ Consulting - Nouveau dossier</h1><span class="badge">Station de Gonflage</span></div>
+<div class="header"><h1>JMJ - Nouveau dossier</h1><span class="badge">Station de Gonflage</span></div>
 <div class="container">
   <div id="form-container">
     <div class="info-box">Remplissez les informations du client pour cr&#233;er le dossier.</div>
@@ -106,7 +106,7 @@
     </div>
   </div>
 </div>
-<div class="footer">JMJ Consulting</div>
+<div class="footer">JMJ</div>
 <script>
 let stationCount=1;
 function addStation(){stationCount++;const l=document.getElementById('stations-list');const b=document.createElement('div');b.className='station-block';b.dataset.index=stationCount-1;b.innerHTML=`<span class="station-num">Station ${stationCount}</span><div class="grid" style="margin-top:0.5rem"><div><label>Nom du site <span class="req">*</span></label><input type="text" class="st-nom" placeholder="Ex: STATION TOTAL DUPONT"></div><div><label>Adresse <span class="req">*</span></label><input type="text" class="st-adresse" placeholder="Adresse de la station"></div><div><label>Code postal <span class="req">*</span></label><input type="text" class="st-cp" maxlength="5" placeholder="20XXX"></div><div><label>Ville <span class="req">*</span></label><input type="text" class="st-ville" placeholder="BASTIA"></div></div>`;l.appendChild(b);updateRemoveButtons();updateSummary()}

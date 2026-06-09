@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JMJ - Nouveau dossier</title>
+<style>
+  :root { --primary: #1a365d; --primary-light: #2c5282; --accent: #ed8936; --bg: #f7fafc; --card: #ffffff; --border: #e2e8f0; --text: #2d3748; --text-light: #718096; --success: #38a169; --danger: #e53e3e; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .header { background: var(--primary); color: white; padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem; }
+  .header h1 { font-size: 1.4rem; font-weight: 600; }
+  .header .badge { background: var(--accent); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+  .container { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; }
+  .section h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+  .section h2 .num { background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 0.25rem; }
+  label .req { color: var(--danger); }
+  input, select, textarea { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(44,82,130,0.1); }
+  .station-block { background: #f7fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; position: relative; }
+  .station-block .station-num { position: absolute; top: -10px; left: 12px; background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 10px; border-radius: 999px; font-weight: 700; }
+  .station-block .remove-btn { position: absolute; top: 8px; right: 8px; background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.2rem; padding: 4px; border-radius: 4px; }
+  .station-block .remove-btn:hover { background: #fed7d7; }
+  .btn { padding: 0.7rem 1.5rem; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-success { background: var(--success); color: white; font-size: 1.1rem; padding: 0.9rem 2rem; }
+  .btn-success:hover { background: #2f855a; }
+  .btn-success:disabled { background: #a0aec0; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
+  .geo-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  .btn-geo { background: white; color: var(--primary-light); border: 1px dashed var(--primary-light); font-size: 0.85rem; padding: 0.45rem 0.8rem; }
+  .btn-geo:hover { background: var(--primary-light); color: white; border-style: solid; }
+  .btn-geo:disabled { opacity: 0.6; cursor: wait; }
+  .geo-status { font-size: 0.8rem; color: var(--text-light); }
+  .geo-status.ok { color: var(--success); }
+  .geo-status.err { color: var(--danger); }
+  .info-box { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; color: #2c5282; margin-bottom: 1rem; }
+  .summary { background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+  .summary h3 { color: var(--success); margin-bottom: 0.5rem; }
+  .summary .line { display: flex; justify-content: space-between; padding: 0.25rem 0; }
+  .success-banner { background: #f0fff4; border: 2px solid #38a169; border-radius: 12px; padding: 2rem; text-align: center; margin-bottom: 1.5rem; }
+  .success-banner h2 { color: #38a169; font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .success-banner p { color: #276749; font-size: 0.95rem; }
+  .success-banner .checkmark { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
+  #output { display: none; }
+  #output.visible { display: block; }
+  .footer { text-align: center; padding: 2rem; color: var(--text-light); font-size: 0.8rem; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .container { padding: 0 1rem; } .section { padding: 1rem; } }
+</style>
+</head>
+<body>
+<div class="header"><h1>JMJ - Nouveau dossier</h1><span class="badge">Station de Gonflage &middot; Nouveau process</span></div>
+<div class="container">
+  <div id="form-container">
+    <div class="info-box">Remplissez les informations du client pour cr&#233;er le dossier. <strong>Nouveau parcours</strong> : le tableau inclura l'attestation Type B.</div>
+    <div class="section">
+      <h2><span class="num">1</span> B&#233;n&#233;ficiaire (Client)</h2>
+      <div class="grid">
+        <div><label>Raison sociale <span class="req">*</span></label><input type="text" id="raison_sociale" placeholder="Ex: SARL DUPONT" required></div>
+        <div><label>SIREN <span class="req">*</span></label><input type="text" id="siren" maxlength="11" placeholder="9 chiffres"></div>
+        <div><label>Nom du signataire <span class="req">*</span></label><input type="text" id="nom_signataire" placeholder="NOM"></div>
+        <div><label>Pr&#233;nom du signataire <span class="req">*</span></label><input type="text" id="prenom_signataire" placeholder="Pr&#233;nom"></div>
+        <div><label>Fonction <span class="req">*</span></label><input type="text" id="fonction" value="G&#233;rant" placeholder="G&#233;rant, Directeur..."></div>
+        <div><label>T&#233;l&#233;phone <span class="req">*</span></label><input type="tel" id="telephone" placeholder="06 XX XX XX XX"></div>
+        <div class="full"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="contact@exemple.fr"></div>
+        <div class="full"><label>Adresse <span class="req">*</span></label><input type="text" id="adresse" placeholder="Num&#233;ro et rue"></div>
+        <div><label>Code postal <span class="req">*</span></label><input type="text" id="code_postal" maxlength="5" placeholder="20XXX"></div>
+        <div><label>Ville <span class="req">*</span></label><input type="text" id="ville" placeholder="BASTIA"></div>
+        <div class="full geo-row">
+          <button type="button" class="btn btn-geo" onclick="useMyLocationBenef(this)">&#128205; R&#233;cup&#233;rer mes coordonn&#233;es GPS</button>
+          <span class="geo-status" id="geo-status-benef"></span>
+          <input type="hidden" id="benef_lat"><input type="hidden" id="benef_lng"><input type="hidden" id="benef_acc">
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h2><span class="num">2</span> Stations de gonflage</h2>
+      <div id="stations-list"></div>
+      <template id="station-template">
+        <div class="station-block">
+          <span class="station-num">Station 1</span>
+          <div class="grid" style="margin-top: 0.5rem;">
+            <div><label>Nom du site <span class="req">*</span></label><input type="text" class="st-nom" placeholder="Ex: STATION TOTAL DUPONT"></div>
+            <div><label>Adresse <span class="req">*</span></label><input type="text" class="st-adresse" placeholder="Adresse de la station"></div>
+            <div><label>Code postal <span class="req">*</span></label><input type="text" class="st-cp" maxlength="5" placeholder="20XXX"></div>
+            <div><label>Ville <span class="req">*</span></label><input type="text" class="st-ville" placeholder="BASTIA"></div>
+            <div class="full geo-row">
+              <button type="button" class="btn btn-geo">&#128205; Utiliser ma position</button>
+              <span class="geo-status"></span>
+              <input type="hidden" class="st-lat"><input type="hidden" class="st-lng"><input type="hidden" class="st-acc">
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="btn-row"><button class="btn btn-outline" onclick="addStation()">+ Ajouter une station</button></div>
+    </div>
+    <div class="section">
+      <h2><span class="num">3</span> D&#233;tails de l'op&#233;ration</h2>
+      <div class="grid">
+        <div><label>Date de signature <span class="req">*</span></label><input type="date" id="date_signature"></div>
+        <div><label>Commercial <span class="req">*</span></label><input type="text" id="commercial" list="commercial-list" placeholder="Nom du commercial" autocomplete="off"><datalist id="commercial-list"><option value="Mateo"><option value="Louis"><option value="Kader"><option value="Franck"><option value="Raph"><option value="Noah"><option value="Jonathan"><option value="Kevin"><option value="Romain"><option value="Manu"><option value="Yvan"></datalist></div>
+        <div class="full"><label>Le(s) site(s) est-il un ERP (&#233;tablissement recevant du public class&#233;) ? <span class="req">*</span></label><select id="erp"><option value="non" selected>Non &mdash; accueille des usagers externes (clients, visiteurs&hellip;) sans classement ERP</option><option value="oui">Oui &mdash; ERP class&#233;</option></select></div>
+      </div>
+      <div class="summary" id="summary">
+        <h3>R&#233;capitulatif</h3>
+        <div class="line"><span>Nombre de stations</span><span id="sum-nb">1</span></div>
+      </div>
+    </div>
+    <div class="section" style="text-align: center;">
+      <button class="btn btn-success" id="submit-btn" onclick="generateAll()">Envoyer le dossier</button>
+    </div>
+  </div>
+  <div id="output">
+    <div class="success-banner">
+      <span class="checkmark">&#10004;</span>
+      <h2>Dossier envoy&#233; avec succ&#232;s !</h2>
+      <p id="success-detail"></p>
+      <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-light);">Votre dossier a &#233;t&#233; transmis.<br>Vous serez recontact&#233; prochainement.</p>
+      <button class="btn btn-outline" style="margin-top: 1.5rem;" onclick="resetForm()">Nouveau dossier</button>
+    </div>
+  </div>
+</div>
+<div class="footer">JMJ</div>
+<script>
+let stationCount=1;
+function buildStationBlock(num){
+  const tpl=document.getElementById('station-template');
+  const node=tpl.content.firstElementChild.cloneNode(true);
+  node.dataset.index=num-1;
+  node.querySelector('.station-num').textContent=`Station ${num}`;
+  node.querySelector('.btn-geo').addEventListener('click',function(){useMyLocationStation(this)});
+  return node;
+}
+function addStation(){stationCount++;const l=document.getElementById('stations-list');l.appendChild(buildStationBlock(stationCount));updateRemoveButtons();updateSummary()}
+function removeStation(btn){if(document.querySelectorAll('.station-block').length<=1)return;btn.closest('.station-block').remove();stationCount--;document.querySelectorAll('.station-block').forEach((b,i)=>{b.querySelector('.station-num').textContent=`Station ${i+1}`});updateRemoveButtons();updateSummary()}
+function updateRemoveButtons(){const blocks=document.querySelectorAll('.station-block');blocks.forEach(b=>{let btn=b.querySelector('.remove-btn');if(blocks.length>1&&!btn){btn=document.createElement('button');btn.className='remove-btn';btn.innerHTML='&times;';btn.title='Supprimer';btn.onclick=function(){removeStation(this)};b.appendChild(btn)}else if(blocks.length<=1&&btn){btn.remove()}})}
+function updateSummary(){const nb=document.querySelectorAll('.station-block').length;document.getElementById('sum-nb').textContent=nb}
+function readGps(latEl,lngEl,accEl){const lat=parseFloat(latEl.value),lng=parseFloat(lngEl.value),acc=parseFloat(accEl.value);if(!isFinite(lat)||!isFinite(lng))return null;return{lat:Number(lat.toFixed(6)),lng:Number(lng.toFixed(6)),accuracy_m:isFinite(acc)?Math.round(acc):null}}
+function getFormData(){const stations=[];document.querySelectorAll('.station-block').forEach(b=>{const gps=readGps(b.querySelector('.st-lat'),b.querySelector('.st-lng'),b.querySelector('.st-acc'));stations.push({nom:b.querySelector('.st-nom').value.trim(),adresse:b.querySelector('.st-adresse').value.trim(),code_postal:b.querySelector('.st-cp').value.trim(),ville:b.querySelector('.st-ville').value.trim(),type:'B',gps:gps})});const dateSig=document.getElementById('date_signature').value;let dateAnniv='';if(dateSig){const d=new Date(dateSig);d.setFullYear(d.getFullYear()+1);dateAnniv=d.toISOString().split('T')[0]}const benefGps=readGps(document.getElementById('benef_lat'),document.getElementById('benef_lng'),document.getElementById('benef_acc'));return{beneficiaire:{raison_sociale:document.getElementById('raison_sociale').value.trim(),siren:document.getElementById('siren').value.trim().replace(/\s/g,''),nom_signataire:document.getElementById('nom_signataire').value.trim(),prenom_signataire:document.getElementById('prenom_signataire').value.trim(),fonction:document.getElementById('fonction').value.trim(),telephone:document.getElementById('telephone').value.trim(),email:document.getElementById('email').value.trim(),adresse:document.getElementById('adresse').value.trim(),code_postal:document.getElementById('code_postal').value.trim(),ville:document.getElementById('ville').value.trim(),erp:document.getElementById('erp').value,gps:benefGps},stations:stations,operation:{date_signature:dateSig,date_anniversaire:dateAnniv,commercial:document.getElementById('commercial').value,delegataire:'Capital Energy',delegataire_siren:'521 618 579',forfait_ht:1600,forfait_ttc:1920,tva:20,volume_cee_par_station_b:296800,prime_par_kwh:7.35},prestataire:{raison_sociale:'JMJ',siren:'909561821',siret:'909 561 821 00028',adresse:'121 Chemin du Barrage, 20224 CASAMACCIOLI',representant:'Jean-Marie SIMEONI',fonction:'Directeur General',telephone:'+33 7 43 03 31 58',email:'transition@jmj.corsica'},meta:{generated_at:new Date().toISOString(),process:'v2',nb_stations:stations.length,total_ht:stations.length*1600,total_ttc:stations.length*1920,total_cee:stations.length*296800,total_prime:stations.length*296800*7.35/1000}}}
+function markError(el,msg){el.focus();el.style.borderColor='var(--danger)';el.title=msg;setTimeout(()=>{el.style.borderColor='';el.title=''},3000);return false}
+function validateForm(){const required=['raison_sociale','siren','nom_signataire','prenom_signataire','fonction','telephone','email','adresse','code_postal','ville','date_signature','commercial'];for(const id of required){const el=document.getElementById(id);if(!el.value.trim())return markError(el,'Ce champ est obligatoire')}const siren=document.getElementById('siren').value.replace(/\s/g,'');if(!/^\d{9}$/.test(siren))return markError(document.getElementById('siren'),'Le SIREN doit contenir exactement 9 chiffres');const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return markError(document.getElementById('email'),'Format email invalide');const cp=document.getElementById('code_postal').value.trim();if(!/^\d{5}$/.test(cp))return markError(document.getElementById('code_postal'),'Le code postal doit contenir 5 chiffres');const stations=document.querySelectorAll('.station-block');for(const b of stations){const inputs=b.querySelectorAll('input:not([type=hidden])');for(const inp of inputs){if(!inp.value.trim())return markError(inp,'Ce champ est obligatoire')}const stCp=b.querySelector('.st-cp').value.trim();if(!/^\d{5}$/.test(stCp))return markError(b.querySelector('.st-cp'),'Code postal : 5 chiffres')}return true}
+function generateAll(){if(!validateForm())return;const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Envoi en cours...';const data=getFormData();const json=JSON.stringify(data,null,2);fetch('https://77.42.67.51.nip.io/cee-webhook',{method:'POST',headers:{'Content-Type':'application/json'},body:json}).then(r=>r.json().then(body=>({status:r.status,body}))).then(({status,body})=>{if(status===200&&body.ok){showSuccess(data)}else{const errMsg=body.error||('Erreur serveur: '+status);throw new Error(errMsg)}}).catch(err=>{btn.disabled=false;btn.textContent='Envoyer le dossier';const msg=document.createElement('div');msg.style.cssText='background:#fed7d7;border:1px solid #fc8181;border-radius:8px;padding:0.75rem 1rem;margin-top:0.75rem;color:#c53030;font-size:0.85rem;text-align:center';msg.textContent='Erreur: '+(err.message||'V\u00e9rifiez votre connexion et r\u00e9essayez.');btn.parentElement.appendChild(msg);setTimeout(()=>msg.remove(),8000)})}
+function showSuccess(data){document.getElementById('form-container').style.display='none';const output=document.getElementById('output');output.style.display='block';document.getElementById('success-detail').textContent=`Client : ${data.beneficiaire.raison_sociale} \u2014 ${data.meta.nb_stations} station(s) \u2014 Commercial : ${data.operation.commercial}`;window.scrollTo({top:0,behavior:'smooth'})}
+function resetForm(){document.getElementById('form-container').style.display='block';document.getElementById('output').style.display='none';document.getElementById('submit-btn').disabled=false;document.getElementById('submit-btn').textContent='Envoyer le dossier';document.querySelectorAll('input:not([type=date])').forEach(i=>{if(i.id!=='fonction')i.value=''});document.getElementById('fonction').value='G\u00e9rant';document.getElementById('date_signature').valueAsDate=new Date();const benefStatus=document.getElementById('geo-status-benef');if(benefStatus){benefStatus.textContent='';benefStatus.className='geo-status'}const list=document.getElementById('stations-list');while(list.firstChild)list.removeChild(list.firstChild);list.appendChild(buildStationBlock(1));stationCount=1;updateSummary()}
+function geoErrorMsg(err){if(!err)return 'Erreur';if(err.code===1)return 'Permission refusee. Autorisez la geolocalisation puis reessayez.';if(err.code===2)return 'Position indisponible. Verifiez le GPS / WiFi.';if(err.code===3)return 'Delai depasse. Reessayez en exterieur.';return err.message||'Erreur de geolocalisation'}
+function getCurrentPos(){return new Promise((resolve,reject)=>{if(!navigator.geolocation){reject(new Error('Geolocalisation non supportee par ce navigateur.'));return}navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:15000,maximumAge:60000})})}
+async function reverseGeocode(lat,lng){const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;const r=await fetch(url,{headers:{'Accept-Language':'fr'}});if(!r.ok)throw new Error('Service adresse indisponible (HTTP '+r.status+')');return r.json()}
+function pickAddress(j){if(!j||!j.address)return{adresse:'',cp:'',ville:''};const a=j.address;const num=a.house_number||'';const rue=a.road||a.pedestrian||a.footway||a.path||'';const adresse=[num,rue].filter(Boolean).join(' ').trim();const cp=a.postcode||'';const ville=(a.city||a.town||a.village||a.municipality||a.hamlet||'').trim();return{adresse,cp,ville}}
+function setStatus(el,msg,kind){if(!el)return;el.textContent=msg||'';el.className='geo-status'+(kind?' '+kind:'')}
+function setBtnBusy(btn,busy,labelDone){if(!btn)return;btn.disabled=!!busy;if(busy){btn.dataset.label=btn.textContent;btn.textContent='⏳ Localisation...'}else{btn.textContent=labelDone||btn.dataset.label||btn.textContent}}
+function fmtCoord(v){return Number(v).toFixed(6)}
+async function useMyLocationBenef(btn){const status=document.getElementById('geo-status-benef');setStatus(status,'',null);setBtnBusy(btn,true);try{const pos=await getCurrentPos();const {latitude:lat,longitude:lng,accuracy:acc}=pos.coords;document.getElementById('benef_lat').value=lat;document.getElementById('benef_lng').value=lng;document.getElementById('benef_acc').value=acc;setStatus(status,`Coordonnees : ${fmtCoord(lat)}, ${fmtCoord(lng)} (±${Math.round(acc)} m)`,'ok')}catch(err){setStatus(status,geoErrorMsg(err),'err')}finally{setBtnBusy(btn,false)}}
+async function useMyLocationStation(btn){const block=btn.closest('.station-block');const status=block.querySelector('.geo-status');setStatus(status,'',null);setBtnBusy(btn,true);try{const pos=await getCurrentPos();const {latitude:lat,longitude:lng,accuracy:acc}=pos.coords;block.querySelector('.st-lat').value=lat;block.querySelector('.st-lng').value=lng;block.querySelector('.st-acc').value=acc;setStatus(status,'Recherche adresse...',null);const j=await reverseGeocode(lat,lng);const {adresse,cp,ville}=pickAddress(j);if(adresse)block.querySelector('.st-adresse').value=adresse;if(cp)block.querySelector('.st-cp').value=cp;if(ville)block.querySelector('.st-ville').value=ville.toUpperCase();setStatus(status,`Position OK (±${Math.round(acc)} m)`,'ok')}catch(err){setStatus(status,geoErrorMsg(err),'err')}finally{setBtnBusy(btn,false)}}
+document.getElementById('stations-list').appendChild(buildStationBlock(1));
+document.getElementById('date_signature').valueAsDate=new Date();['raison_sociale','nom_signataire','ville'].forEach(id=>{document.getElementById(id).addEventListener('input',function(){this.value=this.value.toUpperCase()})});document.getElementById('siren').addEventListener('input',function(){let v=this.value.replace(/\D/g,'').slice(0,9);this.value=v.replace(/(\d{3})(?=\d)/g,'$1 ')});document.getElementById('telephone').addEventListener('input',function(){let v=this.value.replace(/\D/g,'').slice(0,10);this.value=v.replace(/(\d{2})(?=\d)/g,'$1 ')});document.addEventListener('input',updateSummary);
+</script>
+</body>
+</html>
